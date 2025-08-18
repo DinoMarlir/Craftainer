@@ -13,7 +13,7 @@ object Global {
         ╚██████╗██║  ██║██║  ██║██║        ██║   ██║  ██║██║██║ ╚████║███████╗██║  ██║
          ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝        ╚═╝   ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
 
-        ${TextColors.green("Made with ❤️ by Marlon")}
+        ${TextColors.green("Made with ${TextColors.red("<3")} by Marlon")}
     """
     ).trimIndent()
 

@@ -11,4 +11,10 @@ allprojects {
     }
 
     apply(plugin = "org.jetbrains.kotlin.jvm")
+
+    tasks {
+        withType<JavaCompile> {
+            options.encoding = "UTF-8"
+        }
+    }
 }
