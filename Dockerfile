@@ -1,8 +1,10 @@
-FROM openjdk:21 as build
+FROM openjdk:21 AS build
 
 WORKDIR /app
 
 COPY . .
+
+RUN chmod +x gradlew
 
 RUN ./gradlew clean build -x test
 
@@ -10,6 +12,6 @@ FROM openjdk:21
 
 WORKDIR /app
 
-COPY --from=build /app/build/libs/*.jar craftainer-sdk-test.jar
+COPY --from=build /app/build/libs/craftainer-sdk-test.jar craftainer-sdk-test.jar
 
 CMD ["java", "-jar", "craftainer-sdk-test.jar"]
