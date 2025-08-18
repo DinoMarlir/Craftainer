@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   test-app:
     image: craftainer/base
@@ -5,3 +7,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
+    networks:
+      - craftainer-internal-net
+
+networks:
+  craftainer-internal-net:
+    driver: bridge
