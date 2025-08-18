@@ -2,18 +2,23 @@ package ovh.marlon.craftainer.sdk.test
 
 import kotlinx.coroutines.runBlocking
 import ovh.marlon.craftainer.sdk.impl.CraftainerClient
-import ovh.marlon.craftainer.sdk.resources.Network
+import ovh.marlon.craftainer.sdk.resources.Port
 
-fun main() = runBlocking {
+fun main(): kotlin.Unit = runBlocking {
     val client = CraftainerClient.createUsingSocket()
 
-    println(Network.NetworkDriver.BRIDGE.toString().lowercase())
+    val container = client.createContainer(
+        image = "nginx:latest",
+        name = "mein-nginx",
+        ports = listOf(Port(host = 8080, container = 80)),
+        environment = emptyMap(),
+        volumes = mapOf(
+            "/home/user/nginx/html" to "/usr/share/nginx/html"
+        ),
+        networks = emptyList(),
+        command = null
+    )
 
-    client.createNetwork("test-network", Network.NetworkDriver.BRIDGE, "10.0.0.0/24", "10.0.0.1")
-
-    client.getNetworks().forEach {
-        println("Netzwerk: ${it.name} (${it.id})")
-    }
 }
 
 fun anotherTest(client: CraftainerClient) = runBlocking {

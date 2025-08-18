@@ -13,19 +13,26 @@ abstract class Craftainer<C, I, V, N> {
 
     abstract fun createContainer(
         image: String,
-        name: String? = null,
-        ports: List<Port> = emptyList(),
-        environment: Map<String, String> = emptyMap(),
-        volumes: List<Volume<V>> = emptyList(),
-        networks: List<Network<N>> = emptyList(),
-        command: String? = null
-    ): C
+        name: String?,
+        ports: List<Port>,
+        environment: Map<String, String>,
+        volumes: Map<String, String>,
+        networks: List<Network<N>>,
+        command: String?
+    ): Container<C, I>
 
     abstract fun getContainer(id: String): Optional<Container<C, I>>
 
-    abstract fun getContainerByName(name: String): Optional<Container<C, I>>
 
     abstract fun getContainers(): List<Container<C, I>>
+
+    abstract fun runContainer(id: String): Optional<Container<C, I>>
+
+    abstract fun stopContainer(id: String): Boolean
+
+    abstract fun restartContainer(id: String): Boolean
+
+    abstract fun deleteContainer(id: String): Boolean
 
     abstract fun getImage(name: String): Optional<Image<I>>
 
@@ -62,4 +69,5 @@ abstract class Craftainer<C, I, V, N> {
     abstract fun getNetworks(): List<Network<N>>
 
     abstract fun removeNetwork(id: String): Boolean
+
 }

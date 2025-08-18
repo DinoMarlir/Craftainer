@@ -16,12 +16,12 @@ interface Container<C, I> {
     /**
      * The name of the container.
      */
-    val name: String
+    val name: String?
 
     /**
      * The image used to create the container.
      */
-    val image: Image<I>
+    val imageName: String?
 
     /**
      * The status of the container.
@@ -78,7 +78,8 @@ interface Container<C, I> {
         PAUSED,
         RESTARTING,
         EXITED,
-        DEAD;
+        DEAD,
+        UNKNOWN;
 
         companion object {
 

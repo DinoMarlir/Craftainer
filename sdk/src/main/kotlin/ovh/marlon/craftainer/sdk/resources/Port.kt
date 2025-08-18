@@ -8,5 +8,6 @@ package ovh.marlon.craftainer.sdk.resources
  */
 data class Port(
     val host: Int,
-    val container: Int
+    val container: Int,
+    val protocol: String? = null
 )

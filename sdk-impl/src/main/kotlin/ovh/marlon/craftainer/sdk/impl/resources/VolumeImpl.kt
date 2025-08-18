@@ -7,8 +7,8 @@ import ovh.marlon.craftainer.sdk.resources.Volume
 class VolumeImpl(
     override val name: String,
     private val inspectVolumeResponse: InspectVolumeResponse,
-    private val craftainer: Craftainer<*, *, *, *>
-): Volume<InspectVolumeResponse> {
+    private val craftainer: Craftainer<*, *, *, *>,
+) : Volume<InspectVolumeResponse> {
 
     override val mountPoint: String
         get() = native().mountpoint
@@ -17,7 +17,5 @@ class VolumeImpl(
         craftainer.removeVolume(name)
     }
 
-    override fun native(): InspectVolumeResponse {
-        return inspectVolumeResponse
-    }
+    override fun native(): InspectVolumeResponse = inspectVolumeResponse
 }
