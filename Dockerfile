@@ -12,6 +12,6 @@ FROM openjdk:21
 
 WORKDIR /app
 
-COPY --from=build /app/sdk-test/build/libs/craftainer-sdk-test.jar craftainer-sdk-test.jar
+COPY --from=build /app/base/build/libs/base.jar base.jar
 
-CMD ["java", "-jar", "craftainer-sdk-test.jar"]
+CMD ["java", "-jar", "base.jar"]

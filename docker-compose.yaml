@@ -1,7 +1,7 @@
 services:
   test-app:
-    image: craftainer/test-app
-    container_name: craftainer_test_app
+    image: craftainer/base
+    container_name: base
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
