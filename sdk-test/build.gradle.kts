@@ -12,8 +12,14 @@ tasks {
 
         manifest {
             attributes(
-                "Main-Class" to "ovh.marlon.craftainer.sdk.test.EntrypointKt"
+                mapOf(
+                    "Main-Class" to "ovh.marlon.craftainer.sdk.test.EntrypointKt"
+                )
             )
         }
+    }
+
+    build {
+        dependsOn(shadowJar)
     }
 }
