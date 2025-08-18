@@ -84,9 +84,19 @@ class CraftainerClient private constructor(config: DefaultDockerClientConfig): C
 
     override fun createVolume(
         name: String?,
-        mountPoint: String?
     ): Volume<InspectVolumeResponse> {
-        TODO("Not yet implemented")
+        val createVolumeCmd = client.createVolumeCmd()
+            .withName(name)
+            .exec()
+
+        val inspectVolumeResponse = client.inspectVolumeCmd(createVolumeCmd.name)
+            .exec()
+
+        return VolumeImpl(
+            name = createVolumeCmd.name,
+            inspectVolumeResponse = inspectVolumeResponse,
+            craftainer = this
+        )
     }
 
     override fun getVolume(name: String): Optional<Volume<InspectVolumeResponse>> {

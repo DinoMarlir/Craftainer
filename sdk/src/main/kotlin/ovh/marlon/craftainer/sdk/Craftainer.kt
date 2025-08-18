@@ -33,7 +33,7 @@ abstract class Craftainer<C, I, V, N> {
 
     abstract fun getImages(): List<Image<I>>
 
-    abstract fun createVolume(name: String? = null, mountPoint: String? = null): Volume<V>
+    abstract fun createVolume(name: String? = null): Volume<V>
 
     abstract fun getVolume(name: String): Optional<Volume<V>>
 
