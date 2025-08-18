@@ -10,7 +10,7 @@ interface Network<N> {
     /**
      * The name of the network.
      */
-    val name: String
+    val name: String?
 
     /**
      * The driver used for the network.
@@ -20,12 +20,12 @@ interface Network<N> {
     /**
      * The subnet of the network.
      */
-    val subnet: String
+    val subnet: String?
 
     /**
      * The gateway of the network.
      */
-    val gateway: String
+    val gateway: String?
 
     /**
      * The creation time of the network.
@@ -50,6 +50,13 @@ interface Network<N> {
         OVERLAY,
         IPVLAN,
         MACVLAN,
-        NONE
+        NONE;
+
+        companion object {
+            fun fromString(driver: String): NetworkDriver {
+                return entries.find { it.name.equals(driver, ignoreCase = true) }
+                    ?: throw IllegalArgumentException("Unknown network driver: $driver")
+            }
+        }
     }
 }

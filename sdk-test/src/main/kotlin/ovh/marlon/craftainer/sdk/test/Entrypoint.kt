@@ -2,15 +2,18 @@ package ovh.marlon.craftainer.sdk.test
 
 import kotlinx.coroutines.runBlocking
 import ovh.marlon.craftainer.sdk.impl.CraftainerClient
+import ovh.marlon.craftainer.sdk.resources.Network
 
 fun main() = runBlocking {
     val client = CraftainerClient.createUsingSocket()
 
-    // print available images
-    client.getImages().forEach {
-        println("Image: ${it.repository}:${it.tag} (Registry: ${it.registry})")
-    }
+    println(Network.NetworkDriver.BRIDGE.toString().lowercase())
 
+    client.createNetwork("test-network", Network.NetworkDriver.BRIDGE, "10.0.0.0/24", "10.0.0.1")
+
+    client.getNetworks().forEach {
+        println("Netzwerk: ${it.name} (${it.id})")
+    }
 }
 
 fun anotherTest(client: CraftainerClient) = runBlocking {

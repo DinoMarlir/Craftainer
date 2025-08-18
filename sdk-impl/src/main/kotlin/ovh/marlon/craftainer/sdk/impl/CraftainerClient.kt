@@ -3,7 +3,7 @@ package ovh.marlon.craftainer.sdk.impl
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.command.InspectVolumeResponse
 import com.github.dockerjava.api.command.PullImageResultCallback
-import com.github.dockerjava.api.model.PullResponseItem
+import com.github.dockerjava.api.model.ContainerNetwork
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient
@@ -12,10 +12,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ovh.marlon.craftainer.sdk.Craftainer
 import ovh.marlon.craftainer.sdk.impl.resources.ImageImpl
+import ovh.marlon.craftainer.sdk.impl.resources.NetworkImpl
 import ovh.marlon.craftainer.sdk.impl.resources.VolumeImpl
 import ovh.marlon.craftainer.sdk.resources.*
 import java.time.Duration
 import java.util.*
+import kotlin.apply
 import com.github.dockerjava.api.model.Container as NativeContainer
 import com.github.dockerjava.api.model.Image as NativeImage
 import com.github.dockerjava.api.model.Network as NativeNetwork
@@ -181,24 +183,90 @@ class CraftainerClient private constructor(config: DefaultDockerClientConfig): C
     }
 
     override fun createNetwork(
-        name: String?,
+        name: String,
         driver: Network.NetworkDriver,
         subnet: String?,
         gateway: String?
     ): Network<NativeNetwork> {
-        TODO("Not yet implemented")
+        val ipamConfig = if (subnet != null || gateway != null) {
+            listOf(
+                NativeNetwork.Ipam.Config()
+                    .withSubnet(subnet)
+                    .withGateway(gateway)
+            )
+        } else {
+            emptyList()
+        }
+
+        val ipam = NativeNetwork.Ipam()
+            .withConfig(ipamConfig)
+
+
+        val networkResponse = client.createNetworkCmd()
+            .withName(name)
+            .withDriver(driver.toString().lowercase())
+            .withIpam(ipam)
+            .exec()
+
+        val nativeNetwork = client.inspectNetworkCmd()
+            .withNetworkId(networkResponse.id)
+            .exec()
+
+        return NetworkImpl(
+            id = networkResponse.id,
+            nativeNetwork = nativeNetwork,
+            craftainer = this
+        )
     }
 
     override fun getNetwork(id: String): Optional<Network<NativeNetwork>> {
-        TODO("Not yet implemented")
+        return Optional.ofNullable(
+            client.listNetworksCmd()
+                .withIdFilter(id)
+                .exec()
+                .firstOrNull()?.let { nativeNetwork ->
+                    NetworkImpl(
+                        id = nativeNetwork.id,
+                        nativeNetwork = nativeNetwork,
+                        craftainer = this
+                    )
+                }
+        )
     }
 
     override fun getNetworkByName(name: String): Optional<Network<NativeNetwork>> {
-        TODO("Not yet implemented")
+        return Optional.ofNullable(
+            client.listNetworksCmd()
+                .withNameFilter(name)
+                .exec()
+                .firstOrNull()?.let { nativeNetwork ->
+                    NetworkImpl(
+                        id = nativeNetwork.id,
+                        nativeNetwork = nativeNetwork,
+                        craftainer = this
+                    )
+                }
+        )
     }
 
     override fun getNetworks(): List<Network<NativeNetwork>> {
-        TODO("Not yet implemented")
+        return client.listNetworksCmd()
+            .exec()
+            .map { nativeNetwork ->
+                NetworkImpl(
+                    id = nativeNetwork.id,
+                    nativeNetwork = nativeNetwork,
+                    craftainer = this
+                )
+            }
     }
 
+    override fun removeNetwork(id: String): Boolean {
+        return try {
+            client.removeNetworkCmd(id).exec()
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
 }

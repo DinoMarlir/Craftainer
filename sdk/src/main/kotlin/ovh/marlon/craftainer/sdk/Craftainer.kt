@@ -49,7 +49,7 @@ abstract class Craftainer<C, I, V, N> {
     abstract fun removeVolume(name: String)
 
     abstract fun createNetwork(
-        name: String? = null,
+        name: String,
         driver: Network.NetworkDriver = Network.NetworkDriver.BRIDGE,
         subnet: String? = null,
         gateway: String? = null
@@ -60,4 +60,6 @@ abstract class Craftainer<C, I, V, N> {
     abstract fun getNetworkByName(name: String): Optional<Network<N>>
 
     abstract fun getNetworks(): List<Network<N>>
+
+    abstract fun removeNetwork(id: String): Boolean
 }
