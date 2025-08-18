@@ -1,21 +1,22 @@
 package ovh.marlon.craftainer.sdk.impl
 
 import com.github.dockerjava.api.DockerClient
+import com.github.dockerjava.api.command.InspectVolumeResponse
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient
 import com.github.dockerjava.transport.DockerHttpClient
 import ovh.marlon.craftainer.sdk.Craftainer
+import ovh.marlon.craftainer.sdk.impl.resources.VolumeImpl
 import ovh.marlon.craftainer.sdk.resources.*
 import java.time.Duration
 import java.util.*
 import com.github.dockerjava.api.model.Container as NativeContainer
 import com.github.dockerjava.api.model.Image as NativeImage
 import com.github.dockerjava.api.model.Network as NativeNetwork
-import com.github.dockerjava.api.model.Volume as NativeVolume
 
 
-class CraftainerClient private constructor(config: DefaultDockerClientConfig): Craftainer<NativeContainer, NativeImage, NativeVolume, NativeNetwork>() {
+class CraftainerClient private constructor(config: DefaultDockerClientConfig): Craftainer<NativeContainer, NativeImage, InspectVolumeResponse, NativeNetwork>() {
 
     var httpClient: DockerHttpClient = ApacheDockerHttpClient.Builder()
         .dockerHost(config.dockerHost)
@@ -51,7 +52,7 @@ class CraftainerClient private constructor(config: DefaultDockerClientConfig): C
         name: String?,
         ports: List<Port>,
         environment: Map<String, String>,
-        volumes: List<Volume<NativeVolume>>,
+        volumes: List<Volume<InspectVolumeResponse>>,
         networks: List<Network<NativeNetwork>>,
         command: String?
     ): NativeContainer {
@@ -85,20 +86,34 @@ class CraftainerClient private constructor(config: DefaultDockerClientConfig): C
     override fun createVolume(
         name: String?,
         mountPoint: String?
-    ): Volume<NativeVolume> {
+    ): Volume<InspectVolumeResponse> {
         TODO("Not yet implemented")
     }
 
-    override fun getVolume(id: String): Optional<Volume<NativeVolume>> {
-        TODO("Not yet implemented")
+    override fun getVolume(name: String): Optional<Volume<InspectVolumeResponse>> {
+        return Optional.ofNullable(
+            client.inspectVolumeCmd(name).exec()?.let { inspectVolumeResponse ->
+                VolumeImpl(
+                    name = inspectVolumeResponse.name,
+                    inspectVolumeResponse = inspectVolumeResponse,
+                    craftainer = this
+                )
+            }
+        )
     }
 
-    override fun getVolumeByName(name: String): Optional<Volume<NativeVolume>> {
-        TODO("Not yet implemented")
+    override fun getVolumes(): List<Volume<InspectVolumeResponse>> {
+        return client.listVolumesCmd().exec().volumes.map { volume ->
+            VolumeImpl(
+                name = volume.name,
+                inspectVolumeResponse = volume,
+                craftainer = this
+            )
+        }
     }
 
-    override fun getVolumes(): List<Volume<NativeVolume>> {
-        TODO("Not yet implemented")
+    override fun removeVolume(name: String) {
+        client.removeVolumeCmd(name).exec()
     }
 
     override fun createNetwork(

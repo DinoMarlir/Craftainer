@@ -3,11 +3,6 @@ package ovh.marlon.craftainer.sdk.resources
 interface Volume<V> {
 
     /**
-     * The unique identifier of the volume.
-     */
-    val id: String
-
-    /**
      * The name of the volume.
      */
     val name: String
@@ -16,11 +11,6 @@ interface Volume<V> {
      * The mount point of the volume.
      */
     val mountPoint: String
-
-    /**
-     * The creation time of the volume.
-     */
-    val createdAt: Long
 
     /**
      * Removes the volume.

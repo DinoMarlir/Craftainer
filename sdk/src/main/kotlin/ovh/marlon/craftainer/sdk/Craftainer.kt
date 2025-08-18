@@ -35,11 +35,11 @@ abstract class Craftainer<C, I, V, N> {
 
     abstract fun createVolume(name: String? = null, mountPoint: String? = null): Volume<V>
 
-    abstract fun getVolume(id: String): Optional<Volume<V>>
-
-    abstract fun getVolumeByName(name: String): Optional<Volume<V>>
+    abstract fun getVolume(name: String): Optional<Volume<V>>
 
     abstract fun getVolumes(): List<Volume<V>>
+
+    abstract fun removeVolume(name: String)
 
     abstract fun createNetwork(
         name: String? = null,
