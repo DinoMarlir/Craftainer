@@ -15,7 +15,6 @@ import com.github.dockerjava.api.model.Container as NativeContainer
 import com.github.dockerjava.api.model.Image as NativeImage
 import com.github.dockerjava.api.model.Network as NativeNetwork
 
-
 class CraftainerClient private constructor(config: DefaultDockerClientConfig): Craftainer<NativeContainer, NativeImage, InspectVolumeResponse, NativeNetwork>() {
 
     var httpClient: DockerHttpClient = ApacheDockerHttpClient.Builder()
@@ -42,7 +41,7 @@ class CraftainerClient private constructor(config: DefaultDockerClientConfig): C
         return try {
             client.pingCmd().exec()
             true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }
