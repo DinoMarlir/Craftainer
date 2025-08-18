@@ -14,7 +14,7 @@ abstract class Image<I>(
      *
      * @return true if the image was successfully pulled, false otherwise.
      */
-    abstract fun pull(): Boolean
+    abstract suspend fun pull(): Boolean
 
     /**
      * Checks if the image has been pulled.

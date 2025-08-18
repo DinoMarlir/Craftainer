@@ -2,11 +2,16 @@ package ovh.marlon.craftainer.sdk.impl
 
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.api.command.InspectVolumeResponse
+import com.github.dockerjava.api.command.PullImageResultCallback
+import com.github.dockerjava.api.model.PullResponseItem
 import com.github.dockerjava.core.DefaultDockerClientConfig
 import com.github.dockerjava.core.DockerClientImpl
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient
 import com.github.dockerjava.transport.DockerHttpClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import ovh.marlon.craftainer.sdk.Craftainer
+import ovh.marlon.craftainer.sdk.impl.resources.ImageImpl
 import ovh.marlon.craftainer.sdk.impl.resources.VolumeImpl
 import ovh.marlon.craftainer.sdk.resources.*
 import java.time.Duration
@@ -70,17 +75,67 @@ class CraftainerClient private constructor(config: DefaultDockerClientConfig): C
         TODO("Not yet implemented")
     }
 
-    override fun getImage(id: String): Optional<Image<NativeImage>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getImageByName(name: String): Optional<Image<NativeImage>> {
-        TODO("Not yet implemented")
+    override fun getImage(name: String): Optional<Image<NativeImage>> {
+        return Optional.ofNullable(
+            client.listImagesCmd()
+                .withShowAll(true)
+                .exec()
+                .firstOrNull { it.repoTags?.any { tag -> tag.startsWith(name) } == true }
+                ?.let { nativeImage ->
+                    ImageImpl(
+                        registry = "",
+                        repository = nativeImage.repoTags?.firstOrNull()?.substringBefore(':') ?: "",
+                        tag = nativeImage.repoTags?.firstOrNull()?.substringAfter(':') ?: "latest",
+                        nativeImage = nativeImage,
+                        craftainer = this
+                    )
+                }
+        )
     }
 
     override fun getImages(): List<Image<NativeImage>> {
-        TODO("Not yet implemented")
+        return client.listImagesCmd()
+            .withShowAll(true)
+            .exec()
+            .map { nativeImage ->
+                ImageImpl(
+                    registry = "",
+                    repository = nativeImage.repoTags?.firstOrNull()?.substringBefore(':') ?: "",
+                    tag = nativeImage.repoTags?.firstOrNull()?.substringAfter(':') ?: "latest",
+                    nativeImage = nativeImage,
+                    craftainer = this
+                )
+            }
     }
+
+    override suspend fun pullImage(
+        registry: String,
+        repository: String,
+        tag: String
+    ): Boolean = withContext(Dispatchers.IO) {
+
+        try {
+            client.pullImageCmd(repository)
+                .withTag(tag)
+                .withRegistry(registry.takeIf { it.isNotEmpty() })
+                .exec(object : PullImageResultCallback() {
+                    // eventually override fun onNext
+                }).awaitCompletion()
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    override fun removeImage(name: String): Boolean {
+        return try {
+            client.removeImageCmd(name).exec()
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
 
     override fun createVolume(
         name: String?,

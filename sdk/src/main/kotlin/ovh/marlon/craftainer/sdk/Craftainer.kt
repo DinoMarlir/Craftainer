@@ -27,11 +27,18 @@ abstract class Craftainer<C, I, V, N> {
 
     abstract fun getContainers(): List<Container<C, I>>
 
-    abstract fun getImage(id: String): Optional<Image<I>>
+    abstract fun getImage(name: String): Optional<Image<I>>
 
-    abstract fun getImageByName(name: String): Optional<Image<I>>
 
     abstract fun getImages(): List<Image<I>>
+
+    abstract suspend fun pullImage(
+        registry: String = "",
+        repository: String,
+        tag: String = "latest"
+    ): Boolean
+
+    abstract fun removeImage(name: String): Boolean
 
     abstract fun createVolume(name: String? = null): Volume<V>
 
