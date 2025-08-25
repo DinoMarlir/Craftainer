@@ -8,5 +8,9 @@
   },
   "ports": {
     "25565": 25565
+  },
+  "mounts": {
+    "/var/run/docker.sock": "/var/run/docker.sock",
+    "/mnt/plugins": "/plugins"
   }
 }

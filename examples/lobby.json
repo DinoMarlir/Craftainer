@@ -4,10 +4,12 @@
   "env": {
     "TYPE": "VANILLA",
     "MINECRAFT_VERSION": "1.21.8",
-    "EULA": "TRUE",
-    "ONLINE_MODE": "FALSE"
+    "EULA": "TRUE"
   },
   "ports": {
+  },
+  "mounts": {
+    "/var/run/docker.sock": "/var/run/docker.sock"
   },
   "labels": {
     "craftainer-resource": "true",
