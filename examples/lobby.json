@@ -1,12 +1,18 @@
 {
   "name": "lobby",
-  "image": "itzg/mc-proxy:latest",
+  "image": "itzg/minecraft-server:latest",
   "env": {
-    "TYPE": "VELOCITY",
+    "TYPE": "VANILLA",
     "MINECRAFT_VERSION": "1.21.8",
-    "MODRINTH_PROJECTS": "minimotd"
+    "EULA": "TRUE"
   },
   "ports": {
     "25565": 25565
+  },
+  "labels": {
+    "craftainer-resource": "true",
+    "craftainer-deployment": "lobby",
+    "craftainer-velocity-register": "true",
+    "craftainer-velocity-fallback": "true"
   }
 }

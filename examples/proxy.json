@@ -1,8 +1,8 @@
 {
   "name": "proxy",
-  "image": "itzg/minecraft-server:latest",
+  "image": "itzg/mc-proxy:latest",
   "env": {
-    "TYPE": "PAPER",
+    "TYPE": "VELOCITY",
     "MINECRAFT_VERSION": "1.21.8",
     "MODRINTH_PROJECTS": "minimotd"
   },
