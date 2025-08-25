@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   base:
-    image: craftainer/base
+    image: ghcr.io/dinomarlir/craftainer:latest
     container_name: craftainer-base
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
