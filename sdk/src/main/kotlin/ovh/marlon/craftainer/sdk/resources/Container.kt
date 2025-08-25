@@ -29,7 +29,7 @@ interface Container<C, I> {
     val status: ContainerStatus
 
     /**
-     * The networks the container is connected to.
+     * The exposed ports of the container.
      */
     val exposedPorts: List<Port>
 
