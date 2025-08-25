@@ -38,6 +38,9 @@ interface Container<C, I> {
      */
     val createdAt: Long
 
+    /**
+     * The environment variables set in the container.
+     */
     val environment: Map<String, String>
 
     /**
