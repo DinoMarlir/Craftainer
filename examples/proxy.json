@@ -1,0 +1,12 @@
+{
+  "name": "proxy",
+  "image": "itzg/mc-proxy:latest",
+  "env": {
+    "TYPE": "VELOCITY",
+    "MINECRAFT_VERSION": "1.21.8",
+    "MODRINTH_PROJECTS": "minimotd"
+  },
+  "ports": {
+    "25565": 25565
+  }
+}
