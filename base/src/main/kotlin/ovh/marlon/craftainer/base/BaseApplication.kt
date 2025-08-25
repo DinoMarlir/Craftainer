@@ -34,10 +34,18 @@ class BaseApplication: AbstractAppBase("Base") {
             terminal.info("Craftainer network already exists. Skipping creation.")
         }
 
-        reattach()
         deleteStoppedContainers()
+        reattach()
         resolveDeployments()
         deployAll()
+    }
+
+    private fun deleteStoppedContainers() {
+        terminal.info("Deleting stopped Craftainer containers...")
+        client.getContainers().filter { it.native().labels.containsKey(CRAFTAINER_RESOURCE_LABEL) && it.status == Container.ContainerStatus.EXITED }.forEach {
+            terminal.info("${TextColors.gray("•")} Deleting container ${TextColors.brightGreen(it.name ?: "unknown")} (${TextColors.brightCyan(it.id)})")
+            client.deleteContainer(it.id)
+        }
     }
 
     private fun reattach() {
@@ -45,14 +53,6 @@ class BaseApplication: AbstractAppBase("Base") {
         client.getContainers().filter { it.native().labels.containsKey(CRAFTAINER_RESOURCE_LABEL) }.forEach {
             terminal.info("${TextColors.gray("•")} Reattaching to container ${TextColors.brightGreen(it.name ?: "unknown")} (${TextColors.brightCyan(it.id)})")
             craftainers + it
-        }
-    }
-
-    private fun deleteStoppedContainers() {
-        terminal.info("Deleting stopped Craftainer containers...")
-        craftainers.filter { it.native().labels.containsKey(CRAFTAINER_RESOURCE_LABEL) && it.status == Container.ContainerStatus.EXITED }.forEach {
-            terminal.info("${TextColors.gray("•")} Deleting container ${TextColors.brightGreen(it.name ?: "unknown")} (${TextColors.brightCyan(it.id)})")
-            client.deleteContainer(it.id)
         }
     }
 
