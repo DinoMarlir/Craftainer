@@ -32,9 +32,6 @@ data class McDeployment(
     val maxReplicas: Int = 1
 ) {
     fun deploy(client: CraftainerClient): List<Container<com.github.dockerjava.api.model.Container, Image>> {
-
-        println("Available replicas for $name: ${availableReplicas(client)} (min: $minReplicas, max: $maxReplicas)")
-
         if (minReplicas > maxReplicas) {
             return emptyList()
         }
