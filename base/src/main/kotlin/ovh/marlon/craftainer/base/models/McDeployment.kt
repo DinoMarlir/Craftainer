@@ -29,7 +29,8 @@ data class McDeployment(
         "craftainer-deployment" to name,
     ),
     val minReplicas: Int = 1,
-    val maxReplicas: Int = 1
+    val maxReplicas: Int = 1,
+    val mounts: Map<String, String> = emptyMap()
 ) {
     fun deploy(client: CraftainerClient): List<Container<com.github.dockerjava.api.model.Container, Image>> {
         if (minReplicas > maxReplicas) {
@@ -82,7 +83,7 @@ data class McDeployment(
             emptyList()
         },
         command = "/usr/bin/run-bungeecord.sh",
-        volumes = emptyMap(),
+        volumes = mounts,
         labels = labels ?: emptyMap()
     )
 
