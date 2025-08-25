@@ -1,4 +1,4 @@
-package ovh.marlon.craftainer.base.models
+package ovh.marlon.craftainer.base.resources
 
 import com.github.dockerjava.api.model.Image
 import kotlinx.serialization.Serializable

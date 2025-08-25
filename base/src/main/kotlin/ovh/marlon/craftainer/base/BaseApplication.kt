@@ -3,7 +3,7 @@ package ovh.marlon.craftainer.base
 import com.github.ajalt.mordant.rendering.TextColors
 import com.github.ajalt.mordant.terminal.info
 import ovh.marlon.craftainer.app.base.AbstractAppBase
-import ovh.marlon.craftainer.base.models.McDeployment
+import ovh.marlon.craftainer.base.resources.McDeployment
 import ovh.marlon.craftainer.base.utils.Constants.CRAFTAINER_NETWORK_NAME
 import ovh.marlon.craftainer.base.utils.Constants.CRAFTAINER_RESOURCE_LABEL
 import ovh.marlon.craftainer.base.utils.Constants.CRAFTAINER_VOLUME_MOUNT_PATH
