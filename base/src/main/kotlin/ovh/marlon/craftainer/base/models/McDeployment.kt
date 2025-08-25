@@ -88,7 +88,7 @@ data class McDeployment(
 
     fun availableReplicas(client: CraftainerClient): Int {
         return client.getContainers().count {
-            (it.name == name || it.name?.startsWith("$name-") == true) && it.status == Container.ContainerStatus.HEALTHY || it.status == Container.ContainerStatus.STARTING
+            (it.name == name || it.name?.startsWith("$name-") == true) && (it.status == Container.ContainerStatus.HEALTHY || it.status == Container.ContainerStatus.STARTING) && it.labels["craftainer-deployment"] == name
         }
     }
 }
