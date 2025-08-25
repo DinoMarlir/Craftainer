@@ -34,7 +34,7 @@ data class CraftainerDeployment(
 ) {
     fun deploy(client: CraftainerClient): List<Container<com.github.dockerjava.api.model.Container, Image>> {
 
-        if (minReplicas.coerceAtMost(maxReplicas) < 1) {
+        if (minReplicas > maxReplicas) {
             return emptyList()
         }
 
@@ -43,7 +43,7 @@ data class CraftainerDeployment(
             if (client.getContainer(containerName).isPresent) {
                 continue
             }
-            container(name, client)
+            container(containerName, client)
         }
 
         // Create the container
