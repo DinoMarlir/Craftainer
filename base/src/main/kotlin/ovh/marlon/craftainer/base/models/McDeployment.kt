@@ -3,10 +3,9 @@ package ovh.marlon.craftainer.base.models
 import com.github.dockerjava.api.model.Image
 import kotlinx.serialization.Serializable
 import ovh.marlon.craftainer.base.utils.Constants.CRAFTAINER_NETWORK_NAME
+import ovh.marlon.craftainer.base.utils.Constants.CRAFTAINER_RESOURCE_LABEL
 import ovh.marlon.craftainer.sdk.impl.CraftainerClient
-import ovh.marlon.craftainer.sdk.impl.resources.ContainerImpl
 import ovh.marlon.craftainer.sdk.resources.Container
-import kotlin.jvm.optionals.getOrNull
 
 /**
  * A deployment configuration for a Craftainer service.
@@ -19,15 +18,15 @@ import kotlin.jvm.optionals.getOrNull
  * @param labels A map of labels to apply to the container.
  */
 @Serializable
-data class CraftainerDeployment(
+data class McDeployment(
     val name: String,
     val image: String,
     val env: Map<String, String>? = null,
     val ports: Map<Int, Int>? = null,
     val network: String? = CRAFTAINER_NETWORK_NAME,
     val labels: Map<String, String>? = mapOf(
-        "craftainer-resource" to "true",
-        "craftainer-deployment" to name,
+        CRAFTAINER_RESOURCE_LABEL to "true",
+        "mc-deployment" to name,
     ),
     val minReplicas: Int = 1,
     val maxReplicas: Int = 1

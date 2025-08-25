@@ -3,7 +3,7 @@ package ovh.marlon.craftainer.base
 import com.github.ajalt.mordant.rendering.TextColors
 import com.github.ajalt.mordant.terminal.info
 import ovh.marlon.craftainer.app.base.AbstractAppBase
-import ovh.marlon.craftainer.base.models.CraftainerDeployment
+import ovh.marlon.craftainer.base.models.McDeployment
 import ovh.marlon.craftainer.base.utils.Constants.CRAFTAINER_NETWORK_NAME
 import ovh.marlon.craftainer.base.utils.Constants.CRAFTAINER_RESOURCE_LABEL
 import ovh.marlon.craftainer.base.utils.Constants.CRAFTAINER_VOLUME_MOUNT_PATH
@@ -16,7 +16,7 @@ class BaseApplication: AbstractAppBase("Base") {
 
     companion object {
         val client = CraftainerClient.createUsingSocket()
-        val deployments = arrayListOf<CraftainerDeployment>()
+        val deployments = arrayListOf<McDeployment>()
         val craftainers = emptyList<ContainerImpl>()
     }
 
@@ -63,7 +63,7 @@ class BaseApplication: AbstractAppBase("Base") {
         folder.listFiles { file -> file.extension == "json" }?.forEach { file ->
             terminal.info("${TextColors.gray("•")} Found deployment file: ${TextColors.brightGreen(file.name)}")
             try {
-                val deployment = CraftainerDeployment.serializer().let { serializer ->
+                val deployment = McDeployment.serializer().let { serializer ->
                     ovh.marlon.craftainer.base.utils.Constants.JSON.decodeFromString(
                         serializer,
                         file.readText()
