@@ -4,7 +4,8 @@
   "env": {
     "TYPE": "VANILLA",
     "MINECRAFT_VERSION": "1.21.8",
-    "EULA": "TRUE"
+    "EULA": "TRUE",
+    "ONLINE_MODE": "FALSE"
   },
   "ports": {
   },
