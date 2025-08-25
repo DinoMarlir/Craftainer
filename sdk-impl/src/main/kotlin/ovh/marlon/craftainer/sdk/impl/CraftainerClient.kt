@@ -63,7 +63,8 @@ class CraftainerClient private constructor(config: DefaultDockerClientConfig): C
         environment: Map<String, String>,
         volumes: Map<String, String>, // hostPath → containerPath
         networks: List<Network<NativeNetwork>>,
-        command: String?
+        command: String?,
+        labels: Map<String, String>
     ): Container<NativeContainer, NativeImage> {
 
         // Container-Erstellungsbefehl vorbereiten
@@ -85,6 +86,11 @@ class CraftainerClient private constructor(config: DefaultDockerClientConfig): C
         }
 
         val hostConfig = HostConfig().withPortBindings(portBindings)
+
+        // Labels setzen
+        if (labels.isNotEmpty()) {
+            createCmd.withLabels(labels)
+        }
 
         // Volumes mounten (hostPath → containerPath)
         if (volumes.isNotEmpty()) {

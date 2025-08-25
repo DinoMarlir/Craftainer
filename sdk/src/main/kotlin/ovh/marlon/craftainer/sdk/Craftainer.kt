@@ -18,7 +18,8 @@ abstract class Craftainer<C, I, V, N> {
         environment: Map<String, String>,
         volumes: Map<String, String>,
         networks: List<Network<N>>,
-        command: String?
+        command: String?,
+        labels: Map<String, String>
     ): Container<C, I>
 
     abstract fun getContainer(id: String): Optional<Container<C, I>>

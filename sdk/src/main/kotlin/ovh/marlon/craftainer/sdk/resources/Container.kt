@@ -44,6 +44,11 @@ interface Container<C, I> {
     val environment: Map<String, String>
 
     /**
+     * The labels assigned to the container.
+     */
+    val labels: Map<String, String>
+
+    /**
      * The configuration of the container.
      */
     fun run()
@@ -76,6 +81,8 @@ interface Container<C, I> {
      * It also provides a method to convert a string representation of the status into the corresponding enum value.
      */
     enum class ContainerStatus {
+        HEALTHY,
+        STARTING,
         RUNNING,
         STOPPED,
         PAUSED,

@@ -17,7 +17,14 @@ class ContainerImpl(
     override val imageName: String?
         get() = nativeContainer.image
     override val status: Container.ContainerStatus
-        get() = Container.ContainerStatus.fromString(nativeContainer.status) ?: Container.ContainerStatus.UNKNOWN
+        get() {
+            Container.ContainerStatus.entries.forEach {
+                if (nativeContainer.status?.contains(it.toString(), ignoreCase = true) == true) {
+                    return it
+                }
+            }
+            return Container.ContainerStatus.UNKNOWN
+        }
     override val exposedPorts: List<Port>
         get() = nativeContainer.ports.mapNotNull { port ->
             port.privatePort?.let {
@@ -32,6 +39,8 @@ class ContainerImpl(
         get() = nativeContainer.created ?: 0L
     override val environment: Map<String, String>
         get() = TODO("Not yet implemented")
+    override val labels: Map<String, String>
+        get() = nativeContainer.labels ?: emptyMap()
 
     override fun run() {
         craftainer.runContainer(id)

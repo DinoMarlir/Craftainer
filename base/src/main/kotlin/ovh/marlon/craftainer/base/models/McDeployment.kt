@@ -26,23 +26,44 @@ data class McDeployment(
     val network: String? = CRAFTAINER_NETWORK_NAME,
     val labels: Map<String, String>? = mapOf(
         CRAFTAINER_RESOURCE_LABEL to "true",
-        "mc-deployment" to name,
+        "craftainer-deployment" to name,
     ),
     val minReplicas: Int = 1,
     val maxReplicas: Int = 1
 ) {
     fun deploy(client: CraftainerClient): List<Container<com.github.dockerjava.api.model.Container, Image>> {
 
+        println("Available replicas for $name: ${availableReplicas(client)} (min: $minReplicas, max: $maxReplicas)")
+
         if (minReplicas > maxReplicas) {
             return emptyList()
         }
 
-        for (i in 1..minReplicas) {
-            val containerName = if (minReplicas > 1) "$name-$i" else name
-            if (client.getContainer(containerName).isPresent) {
-                continue
+        if (availableReplicas(client) < minReplicas) {
+            while (availableReplicas(client) < minReplicas) {
+                fun nextFreeNumber(): Int {
+                    val existingNumbers = client.getContainers().mapNotNull {
+                        if (it.name == name) {
+                            0
+                        } else if (it.name?.startsWith("$name-") == true) {
+                            it.name?.substringAfter("$name-")?.toIntOrNull()
+                        } else {
+                            null
+                        }
+                    }.toSet()
+                    var i = 0
+                    while (true) {
+                        if (!existingNumbers.contains(i)) {
+                            return i
+                        }
+                        i++
+                    }
+                }
+
+                val containerName = "$name-${nextFreeNumber()}"
+
+                container(containerName, client)
             }
-            container(containerName, client)
         }
 
         // Create the container
@@ -65,5 +86,12 @@ data class McDeployment(
         },
         command = "/usr/bin/run-bungeecord.sh",
         volumes = emptyMap(),
+        labels = labels ?: emptyMap()
     )
+
+    fun availableReplicas(client: CraftainerClient): Int {
+        return client.getContainers().count {
+            (it.name == name || it.name?.startsWith("$name-") == true) && it.status == Container.ContainerStatus.HEALTHY || it.status == Container.ContainerStatus.STARTING
+        }
+    }
 }
