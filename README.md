@@ -3,11 +3,17 @@ A tool to build Minecraft networks on top of Docker.
 
 ## 🚀 Get Started
 
+### Requirements
+- 1GB+ RAM
+- amd64 architecture (arm64 is currently experimental)
+- Linux-based OS
+- Root Permissions
+
 ### Debian/Ubuntu
 Use our install script for a quick setup. Make sure you have sudo privileges.
 
 > [!CAUTION]
-> This script only works on Debian-based distributions and amd64 architecture.
+> This script only works on Debian-based distributions
 ```sh
 curl -fsSL https://url.wolfjulian.de/install-craftainer | sudo bash
 ```
