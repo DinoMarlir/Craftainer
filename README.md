@@ -23,7 +23,7 @@ For a fast and straightforward setup, use our official installation script. Ensu
 > This script is only compatible with Debian-based distributions.
 
 ```sh
-curl -fsSL https://url.wolfjulian.de/install-craftainer | sudo bash
+curl -fsSL https://gist.githubusercontent.com/getSono/e7fa4cb742a4a28ccd4e0ceb333f0d65/raw/d1fc974656c2cccc0dc75e02e8dcb7a1f3c68c58/install_craftainer.sh | sudo bash
 ```
 
 ---
