@@ -51,7 +51,7 @@ mkdir -p ./data/deployments
 curl -sSL https://raw.githubusercontent.com/DinoMarlir/Craftainer/refs/heads/master/examples/proxy.json -o ./data/deployments/proxy.json
 curl -sSL https://raw.githubusercontent.com/DinoMarlir/Craftainer/refs/heads/master/examples/lobby.json -o ./data/deployments/lobby.json
 
-# ---Downloading required images ---
+# --- Downloading required images ---
 echo -e "${GREEN}Downloading required images${RESET}"
 sudo docker pull itzg/minecraft-server
 sudo docker pull itzg/mc-proxy
