@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Farben
+# Colors
 GREEN="\e[32m"
 RED="\e[31m"
 YELLOW="\e[33m"
