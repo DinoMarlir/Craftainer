@@ -11,7 +11,7 @@ Craftainer is a powerful tool designed to simplify the deployment and management
 - **Memory:** 4GB RAM or more recommended
 - **Architecture:** amd64 (arm64 is experimental)
 - **Operating System:** Linux-based
-- **Permissions:** Root or sudo privileges
+- **Permissions:** Root privileges to install the dependencies (Only when you use the Installer)
 
 ---
 
